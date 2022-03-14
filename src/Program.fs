@@ -16,6 +16,9 @@ open Microsoft.Extensions.Logging
 open System.ComponentModel.DataAnnotations
 open Microsoft.EntityFrameworkCore
 open EntityFrameworkCore.FSharp.Extensions
+open System.Text.Json;
+open System.Text.Json.Serialization;
+
 
 module Program =
     let exitCode = 0
@@ -25,12 +28,13 @@ module Program =
 
         let builder = WebApplication.CreateBuilder(args)
         
+        builder.Services.AddControllers()
+        
         builder.Services.AddDbContext<PlanetContext>(
             fun optionsBuilder ->
-                optionsBuilder.UseInMemoryDatabase |> ignore
-            )
-        
-        builder.Services.AddControllers()
+                printfn "in options builder lambda"
+                optionsBuilder.UseInMemoryDatabase("test") |> ignore
+            ) 
 
 
         let app = builder.Build()
